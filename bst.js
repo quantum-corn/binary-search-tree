@@ -46,23 +46,47 @@ const Tree = function (array) {
     }
   };
 
+  const buildTree = function (array) {
+    let rootValue, leftChild = null, rightChild = null;
+    if (array.length == 0) return null;
+    if (array.length == 1) rootValue = array[0];
+    else {
+      let middle = Math.floor(array.length / 2);
+      rootValue = array[middle];
+      leftChild = buildTree(array.slice(0, middle));
+      rightChild = buildTree(array.slice(middle + 1));
+    }
+    let root = Node(rootValue, leftChild, rightChild);
+
+    return root;
+  };
+
   const prettyPrint = (node, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
     }
-    if (node.right !== null) {
-      prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+    if (node.rightChild !== null) {
+      prettyPrint(node.rightChild, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
-    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-    if (node.left !== null) {
-      prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
+    if (node.leftChild !== null) {
+      prettyPrint(node.leftChild, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   };
 
+  console.log('Fixing the data...');
   let fixedArray = fix(array);
+  console.log(fixedArray);
+  console.log('Sorting the data...');
   let sortedArray = sort(fixedArray);
+  console.log(sortedArray);
+  console.log('Building the binary tree...');
+  let root = buildTree(sortedArray);
+  prettyPrint(root);
 
-  return { root, prettyPrint };
+  return {};
 };
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+console.log('Received\n', array);
+let test = Tree(array);
